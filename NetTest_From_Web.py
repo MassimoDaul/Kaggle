@@ -4,6 +4,7 @@ from numpy import exp, array, random, dot
 
 class NeuralNetwork():
     def __init__(self):
+        # __init__ runs every time a class NeuralNetwork is created. This needs to happen for the seed to by consistent
         # Seed the random number generator, so it generates the same numbers
         # every time the program runs.
         random.seed(1)
