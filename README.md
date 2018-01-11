@@ -10,14 +10,14 @@ Textblob and nltk:
 
     pip3 install nltk
     pip3 install textblob
-  
     
-    /Applications/Python 3.6/Install Certificates.command
+        
+    # SSL doesn't trust the punkt resources, so we have to manually grab it. 
     
-    # SSL doesn't trust the punkt resources, so we have to manually update it sometimes. Only do if you are getting errors
+    pip3 install --trusted-host pypi.python.org textblob
     
     nltk.download()
-    
+   
     # Should open up window and you can choose what to download. Grab all of it.
     
     python3 -m textblob.download_corpora
@@ -28,7 +28,7 @@ Tensorflow:
 
 This manually grabs the right version for our 3.6 interpreter.
 
-    python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-0.12.0-py3-none-any.whl
+    python3 -m pip3 install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-0.12.0-py3-none-any.whl
     
     
     
