@@ -10,10 +10,11 @@ Textblob and nltk:
 
     pip3 install nltk
     pip3 install textblob
+  
     
     /Applications/Python 3.6/Install Certificates.command
     
-    # SSL doesn't trust the punkt resources, so we have to manually update it
+    # SSL doesn't trust the punkt resources, so we have to manually update it sometimes. Only do if you are getting errors
     
     nltk.download()
     
