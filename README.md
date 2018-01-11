@@ -16,6 +16,10 @@ Textblob and nltk:
     
     pip3 install --trusted-host pypi.python.org textblob
     
+    # in your python console
+    
+    import nltk
+    
     nltk.download()
    
     # Should open up window and you can choose what to download. Grab all of it.
