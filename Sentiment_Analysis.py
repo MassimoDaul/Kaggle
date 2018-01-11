@@ -4,7 +4,8 @@ import pandas as pd
 
 
 def sentiment(blob):
-    blob = TextBlob("force fuck")
+
+    blob = TextBlob(str(blob))
 
     words = blob.words
     words.lower()
@@ -79,16 +80,11 @@ def sentiment(blob):
         return toxic, severe_toxic, obscene, threat, insult, identity_hate
 
 
+def totalsentiment(blob):
+
+    blob = TextBlob(blob)
+    return blob.sentiment.polarity
 
 
-
-
-
-
-
-
-
-
-
-
+print(sentiment("fuck with the force hoe. "))
 
