@@ -22,7 +22,7 @@ Textblob and nltk:
     
     # Make sure the quotes are there, as spacing is wierd
 
-    # in your python console run:
+    # in your python run:
     
     import nltk
     
