@@ -18,7 +18,7 @@ Textblob and nltk:
     
     "/Applications/Python 3.6/Install Certificates.command"
     
-    # Make sure the quotes are there
+    # Make sure the quotes are there, as spacing is wierd
  
     
     
