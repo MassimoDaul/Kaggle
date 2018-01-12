@@ -86,5 +86,4 @@ def totalsentiment(blob):
     return blob.sentiment.polarity
 
 
-print(sentiment("fuck with the force hoe. "))
 
