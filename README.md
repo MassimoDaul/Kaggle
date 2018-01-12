@@ -12,7 +12,7 @@ Textblob and nltk:
     pip3 install textblob
     
         
-    # SSL doesn't trust the punkt resources, so we have to manually grab it and install the certificates. 
+    # SSL doesn't trust the way to get resources, so we have to manually grab it and install the certificates. 
     
     pip3 install --trusted-host pypi.python.org textblob
     
