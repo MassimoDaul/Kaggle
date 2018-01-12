@@ -8,6 +8,8 @@ For a statewide science fair. Intended to be private and used as a bit of a shar
 
 Textblob and nltk:
 
+    # in your terminal run:
+
     pip3 install nltk
     pip3 install textblob
     
@@ -19,12 +21,8 @@ Textblob and nltk:
     "/Applications/Python 3.6/Install Certificates.command"
     
     # Make sure the quotes are there, as spacing is wierd
- 
-    
-    
-    
-    
-    # in your python console
+
+    # in your python console run:
     
     import nltk
     
