@@ -4,12 +4,10 @@ import pandas as pd
 
 
 def sentiment(blob):
-
+    
     blob = TextBlob(str(blob))
-
     words = blob.words
     words.lower()
-
     sentences = blob.sentences
 
     # sentiment counters
@@ -23,7 +21,6 @@ def sentiment(blob):
 
     with open("/Users/massimodaul/PycharmProjects/New/titanic/toxic") as f:
         Toxicwords = f.read().splitlines()
-
     with open("/Users/massimodaul/PycharmProjects/New/titanic/severe_toxic") as f:
         SevereToxicWords = f.read().splitlines()
 
