@@ -26,7 +26,7 @@ Uses data from csv file in repository to get comments.
 
 """
 
-from Sentiment_Analysis import sentiment, totalsentiment
+from Sentiment_Analysis import sentiment
 import NetTest_From_Web
 import tensorflow as tf
 import pandas as pd
@@ -43,26 +43,43 @@ with open("/Users/massimodaul/Downloads/train-2.csv", "r") as train_df:
 
     for row in reader:
         if (row['toxic'] == "1" or row['severe_toxic'] == "1" or row['obscene'] == "1" or row['threat'] == "1"
-                or row['insult'] == "1"  or row['identity_hate'] == "1"):
+                or row['insult'] == "1" or row['identity_hate'] == "1"):
 
             ToxicComments.append(row['comment_text'])
 
-    for row in reader:
-        if (row['toxic'] == "0" and row['severe_toxic'] == "0" and row['obscene'] == "0" and row['threat'] == "0"
-                and row['insult'] == "0" and row['identity_hate'] == "0"):
+with open("/Users/massimodaul/Downloads/train-2.csv", "r") as train_df:
+    reader = csv.DictReader(train_df)
 
-            CleanComments.append(row['comment_text'])
+    for row in reader:
+        if row['toxic'] == "0":
+            if row['severe_toxic'] == "0":
+                if row['obscene'] == "0":
+                    if row["threat"] == "0":
+                        if row['insult'] == "0":
+                            if row['identity_hate'] == "0":
+                                CleanComments.append(row['comment_text'])
+
+# populating sentiment analysis values of the toxic and clean comments for array
+
+ToxicSentiments = []
+CleanSentiments = []
+
+for i in range(len(ToxicComments)):
+    ToxicSentiments.append(sentiment(ToxicComments[i]))
+
+
+for i in range(len(CleanComments)):
+    CleanSentiments.append(sentiment(CleanComments[i]))
 
 
 class NeuralNetwork():
     def __init__(self):
-        # __init__ runs every time a class NerualNetwork is created, this needs to happen for the nums to be consistent
         # Seed the random number generator, so it generates the same numbers
         # every time the program runs.
-        # random.seed(1)
+        random.seed(1)
 
-        # We model a single neuron, with 6 input connections and 1 output connection.
-        # We assign random weights to a 6 x 1 matrix, with values in the range -1 to 1
+        # We model a single neuron, with 3 input connections and 1 output connection.
+        # We assign random weights to a 3 x 1 matrix, with values in the range -1 to 1
         # and mean 0.
         self.synaptic_weights = 2 * random.random((6, 1)) - 1
 
@@ -70,7 +87,6 @@ class NeuralNetwork():
     # We pass the weighted sum of the inputs through this function to
     # normalise them between 0 and 1.
     def __sigmoid(self, x):
-        # @staticmethod
         return 1 / (1 + exp(-x))
 
     # The derivative of the Sigmoid function.
@@ -82,7 +98,7 @@ class NeuralNetwork():
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
     def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations):
-        for i in range(0, number_of_training_iterations):
+        for iteration in xrange(number_of_training_iterations):
             # Pass the training set through our neural network (a single neuron).
             output = self.think(training_set_inputs)
 
@@ -100,37 +116,40 @@ class NeuralNetwork():
 
     # The neural network thinks.
     def think(self, inputs):
-        # if inputs.all() == 0:
-            # return 0
-
         # Pass inputs through our neural network (our single neuron).
         return self.__sigmoid(dot(inputs, self.synaptic_weights))
 
 
-# Initialise a single neuron neural network.
-neural_network = NeuralNetwork()
+if __name__ == "__main__":
 
-print("Random starting synaptic weights: ")
-print(neural_network.synaptic_weights)
+    #Intialise a single neuron neural network.
+    neural_network = NeuralNetwork()
 
-training_set = []
+    print("Random starting synaptic weights: ")
+    print(neural_network.synaptic_weights)
 
-for i in range(0, len(ToxicComments)):
+    # The training set. We have 4 examples, each consisting of 3 input values
+    # and 1 output value.
+    training_set_inputs = array([[ToxicSentiments[0]], [ToxicSentiments[1]],
+                                 [ToxicSentiments[2]], [ToxicSentiments[3]],
+                                 [ToxicSentiments[4]], [ToxicSentiments[5]],
+                                 [ToxicSentiments[6]], [ToxicSentiments[7]],
+                                 [ToxicSentiments[8]], [ToxicSentiments[9]],
+                                 [CleanSentiments[0]], [CleanSentiments[1]],
+                                 [CleanSentiments[2]], [CleanSentiments[3]],
+                                 [CleanSentiments[4]], [CleanSentiments[5]],
+                                 [CleanSentiments[6]], [CleanSentiments[7]],
+                                 [CleanSentiments[8]], [CleanSentiments[9]],
+                                ])
+    training_set_outputs = array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]).T
 
+    # Train the neural network using a training set.
+    # Do it 10,000 times and make small adjustments each time.
+    neural_network.train(training_set_inputs, training_set_outputs, 10000)
 
-# TODO
+    print("New synaptic weights after training: ")
+    print(neural_network.synaptic_weights)
 
-# Pass in our values to the array for the neural net. 6 inputs - 1 output.
-
-
-# Train the neural network using a training set.
-# Do it 10,000 times and make small adjustments each time.
-neural_network.train(training_set_inputs, training_set_outputs, 100000)
-
-print("New synaptic weights after training: ")
-print(neural_network.synaptic_weights)
-
-# Test the neural network with a new situation.
-print("New condition:")
-print(float(neural_network.think(array([]))))
-
+    # Test the neural network with a new situation.
+    print("Considering new situation [1, 0, 0] -> ?: ")
+    print(neural_network.think(array([ToxicSentiments[11]])))
