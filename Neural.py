@@ -150,6 +150,6 @@ if __name__ == "__main__":
     print("New synaptic weights after training: ")
     print(neural_network.synaptic_weights)
 
-    # Test the neural network with a new situation.
-    print("Considering new situation [1, 0, 0] -> ?: ")
+    # Test the neural network with a new situation. Should have an output of 1
+    print("Considering new situation:")
     print(neural_network.think(array([ToxicSentiments[11]])))
