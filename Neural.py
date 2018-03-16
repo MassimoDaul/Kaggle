@@ -2,6 +2,8 @@
 
 Massimo Daul
 
+Might need bigger computer to run
+
 
 program to analyze web page comment and determine if it should be censored. Trained net on wikipedia comments from a
 kaggle data base.
@@ -32,7 +34,8 @@ import tensorflow as tf
 import pandas as pd
 import csv
 from numpy import exp, array, random, dot
-
+import numpy
+import random
 # populating our list of toxic comments using the csv file:
 
 ToxicComments = []
@@ -76,12 +79,12 @@ class NeuralNetwork():
     def __init__(self):
         # Seed the random number generator, so it generates the same numbers
         # every time the program runs.
-        random.seed(1)
+        numpy.random.seed(1)
 
         # We model a single neuron, with 3 input connections and 1 output connection.
         # We assign random weights to a 3 x 1 matrix, with values in the range -1 to 1
         # and mean 0.
-        self.synaptic_weights = 2 * random.random((6, 1)) - 1
+        self.synaptic_weights = 2 * numpy.random.random((7, 1)) - 1
 
     # The Sigmoid function, which describes an S shaped curve.
     # We pass the weighted sum of the inputs through this function to
@@ -98,7 +101,7 @@ class NeuralNetwork():
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
     def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations):
-        for iteration in xrange(number_of_training_iterations):
+        for iteration in range(1, number_of_training_iterations):
             # Pass the training set through our neural network (a single neuron).
             output = self.think(training_set_inputs)
 
@@ -112,7 +115,8 @@ class NeuralNetwork():
             adjustment = dot(training_set_inputs.T, error * self.__sigmoid_derivative(output))
 
             # Adjust the weights.
-            self.synaptic_weights += adjustment
+            for x in range(0, len(self.synaptic_weights)):
+                self.synaptic_weights[x] += adjustment[x]
 
     # The neural network thinks.
     def think(self, inputs):
@@ -120,36 +124,35 @@ class NeuralNetwork():
         return self.__sigmoid(dot(inputs, self.synaptic_weights))
 
 
-if __name__ == "__main__":
+# Initialize a single neuron neural network.
+neural_network = NeuralNetwork()
 
-    #Intialise a single neuron neural network.
-    neural_network = NeuralNetwork()
+print("Random starting synaptic weights: ")
+print(neural_network.synaptic_weights)
 
-    print("Random starting synaptic weights: ")
-    print(neural_network.synaptic_weights)
+# The training set. We have 4 examples, each consisting of 3 input values
+# and 1 output value.
 
-    # The training set. We have 4 examples, each consisting of 3 input values
-    # and 1 output value.
-    training_set_inputs = array([[ToxicSentiments[0]], [ToxicSentiments[1]],
-                                 [ToxicSentiments[2]], [ToxicSentiments[3]],
-                                 [ToxicSentiments[4]], [ToxicSentiments[5]],
-                                 [ToxicSentiments[6]], [ToxicSentiments[7]],
-                                 [ToxicSentiments[8]], [ToxicSentiments[9]],
-                                 [CleanSentiments[0]], [CleanSentiments[1]],
-                                 [CleanSentiments[2]], [CleanSentiments[3]],
-                                 [CleanSentiments[4]], [CleanSentiments[5]],
-                                 [CleanSentiments[6]], [CleanSentiments[7]],
-                                 [CleanSentiments[8]], [CleanSentiments[9]],
-                                ])
-    training_set_outputs = array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]).T
+training_set_inputs = array([[numpy.squeeze(1, ToxicSentiments[0])], [numpy.squeeze(1, ToxicSentiments[1])],
+                            [numpy.squeeze(1, ToxicSentiments[2])], [numpy.squeeze(1, ToxicSentiments[3])],
+                            [numpy.squeeze(1, ToxicSentiments[4])], [1, numpy.squeeze(ToxicSentiments[5])],
+                            [numpy.squeeze(1, ToxicSentiments[6])], [1, numpy.squeeze(ToxicSentiments[7])],
+                            [numpy.squeeze(1, ToxicSentiments[8])], [1, numpy.squeeze(ToxicSentiments[9])],
+                            [numpy.squeeze(1, CleanSentiments[0])], [1, numpy.squeeze(CleanSentiments[1])],
+                            [numpy.squeeze(1, CleanSentiments[2])], [1, numpy.squeeze(CleanSentiments[3])],
+                            [numpy.squeeze(1, CleanSentiments[4])], [1, numpy.squeeze(CleanSentiments[5])],
+                            [numpy.squeeze(1, CleanSentiments[6])], [1, numpy.squeeze(CleanSentiments[7])],
+                            [numpy.squeeze(1, CleanSentiments[8])], [1, numpy.squeeze(CleanSentiments[9])]])
 
-    # Train the neural network using a training set.
-    # Do it 10,000 times and make small adjustments each time.
-    neural_network.train(training_set_inputs, training_set_outputs, 10000)
+training_set_outputs = array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]).T
 
-    print("New synaptic weights after training: ")
-    print(neural_network.synaptic_weights)
+# Train the neural network using a training set.
+# Do it 10,000 times and make small adjustments each time.
+neural_network.train(training_set_inputs, training_set_outputs, 10000)
 
-    # Test the neural network with a new situation. Should have an output of 1
-    print("Considering new situation:")
-    print(neural_network.think(array([ToxicSentiments[11]])))
+print("New synaptic weights after training: ")
+print(neural_network.synaptic_weights)
+
+# Test the neural network with a new situation. Should have an output of 1
+print("Considering new situation:")
+print(neural_network.think(array([numpy.squeeze(ToxicSentiments[11])])))
