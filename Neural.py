@@ -130,21 +130,51 @@ neural_network = NeuralNetwork()
 print("Random starting synaptic weights: ")
 print(neural_network.synaptic_weights)
 
+# very tedious way of preparing input values (NEED TO CHANGE)
+
+# first toxic comment
+a = ToxicSentiments[0][0]
+b = ToxicSentiments[0][1]
+c = ToxicSentiments[0][2]
+d = ToxicSentiments[0][3]
+e = ToxicSentiments[0][4]
+f = ToxicSentiments[0][5]
+g = ToxicSentiments[0][6]
+
+# second toxic comment
+h = ToxicSentiments[1][0]
+i = ToxicSentiments[1][1]
+j = ToxicSentiments[1][2]
+k = ToxicSentiments[1][3]
+l = ToxicSentiments[1][4]
+m = ToxicSentiments[1][5]
+n = ToxicSentiments[1][6]
+
+# first clean comment
+o = CleanSentiments[0][0]
+p = CleanSentiments[0][1]
+q = CleanSentiments[0][2]
+r = CleanSentiments[0][3]
+s = CleanSentiments[0][4]
+t = CleanSentiments[0][5]
+u = CleanSentiments[0][6]
+
+# second clean comment
+v = CleanSentiments[1][0]
+w = CleanSentiments[1][1]
+x = CleanSentiments[1][2]
+y = CleanSentiments[1][3]
+z = CleanSentiments[1][4]
+a1 = CleanSentiments[1][5]
+b1 = CleanSentiments[1][6]
+
+
 # The training set. We have 4 examples, each consisting of 3 input values
-# and 1 output value.
+# and 1 output value
 
-training_set_inputs = array([[numpy.squeeze(1, ToxicSentiments[0])], [numpy.squeeze(1, ToxicSentiments[1])],
-                            [numpy.squeeze(1, ToxicSentiments[2])], [numpy.squeeze(1, ToxicSentiments[3])],
-                            [numpy.squeeze(1, ToxicSentiments[4])], [1, numpy.squeeze(ToxicSentiments[5])],
-                            [numpy.squeeze(1, ToxicSentiments[6])], [1, numpy.squeeze(ToxicSentiments[7])],
-                            [numpy.squeeze(1, ToxicSentiments[8])], [1, numpy.squeeze(ToxicSentiments[9])],
-                            [numpy.squeeze(1, CleanSentiments[0])], [1, numpy.squeeze(CleanSentiments[1])],
-                            [numpy.squeeze(1, CleanSentiments[2])], [1, numpy.squeeze(CleanSentiments[3])],
-                            [numpy.squeeze(1, CleanSentiments[4])], [1, numpy.squeeze(CleanSentiments[5])],
-                            [numpy.squeeze(1, CleanSentiments[6])], [1, numpy.squeeze(CleanSentiments[7])],
-                            [numpy.squeeze(1, CleanSentiments[8])], [1, numpy.squeeze(CleanSentiments[9])]])
+training_set_inputs = array([[a, b, c, d, e, f, g], [h, i, j, k, l, m, n], [o, p, q, r, s, t, u], [v, w, x, y, z, a1, b1]])
 
-training_set_outputs = array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]).T
+training_set_outputs = array([[1, 1, 0, 0]]).T
 
 # Train the neural network using a training set.
 # Do it 10,000 times and make small adjustments each time.
