@@ -122,6 +122,17 @@ class NeuralNetwork():
     def think(self, inputs):
         # Pass inputs through our neural network (our single neuron).
         return self.__sigmoid(dot(inputs, self.synaptic_weights))
+        
+    # test function checks for [0, 0, 0, 0, 0, 0, 0] => 0.5 error 
+    def test(self, TestInput):
+        
+        out = self.__sigmoid(dot(TestInput, self.synaptic_weights))
+        
+        if out == 0.5:
+            return 0
+        
+        else:
+            return out
 
 
 # Initialize a single neuron neural network.
@@ -150,31 +161,69 @@ l = ToxicSentiments[1][4]
 m = ToxicSentiments[1][5]
 n = ToxicSentiments[1][6]
 
+# third toxic comment
+o = ToxicSentiments[2][0]
+p = ToxicSentiments[2][1]
+q = ToxicSentiments[2][2]
+r = ToxicSentiments[2][3]
+s = ToxicSentiments[2][4]
+t = ToxicSentiments[2][5]
+u = ToxicSentiments[2][6]
+
+# fourth toxic comment
+v = ToxicSentiments[3][0]
+w = ToxicSentiments[3][1]
+x = ToxicSentiments[3][2]
+y = ToxicSentiments[3][3]
+z = ToxicSentiments[3][4]
+a1 = ToxicSentiments[3][5]
+b1 = ToxicSentiments[3][6]
+
 # first clean comment
-o = CleanSentiments[0][0]
-p = CleanSentiments[0][1]
-q = CleanSentiments[0][2]
-r = CleanSentiments[0][3]
-s = CleanSentiments[0][4]
-t = CleanSentiments[0][5]
-u = CleanSentiments[0][6]
+c1 = CleanSentiments[1][0]
+d1 = CleanSentiments[1][1]
+e1 = CleanSentiments[1][2]
+f1 = CleanSentiments[1][3]
+g1 = CleanSentiments[1][4]
+h1 = CleanSentiments[1][5]
+i1 = CleanSentiments[1][6]
 
 # second clean comment
-v = CleanSentiments[1][0]
-w = CleanSentiments[1][1]
-x = CleanSentiments[1][2]
-y = CleanSentiments[1][3]
-z = CleanSentiments[1][4]
-a1 = CleanSentiments[1][5]
-b1 = CleanSentiments[1][6]
+j1 = CleanSentiments[1][0]
+k1 = CleanSentiments[1][1]
+l1 = CleanSentiments[1][2]
+m1 = CleanSentiments[1][3]
+n1 = CleanSentiments[1][4]
+o1 = CleanSentiments[1][5]
+p1 = CleanSentiments[1][6]
 
+# third clean comment
+q1 = CleanSentiments[2][0]
+r1 = CleanSentiments[2][1]
+s1 = CleanSentiments[2][2]
+t1 = CleanSentiments[2][3]
+u1 = CleanSentiments[2][4]
+v1 = CleanSentiments[2][5]
+w1 = CleanSentiments[2][6]
+
+# fourth clean comment
+x1 = CleanSentiments[3][0]
+y1 = CleanSentiments[3][1]
+z1 = CleanSentiments[3][2]
+a2 = CleanSentiments[3][3]
+b2 = CleanSentiments[3][4]
+c2 = CleanSentiments[3][5]
+d2 = CleanSentiments[3][6]
 
 # The training set. We have 4 examples, each consisting of 3 input values
 # and 1 output value
 
-training_set_inputs = array([[a, b, c, d, e, f, g], [h, i, j, k, l, m, n], [o, p, q, r, s, t, u], [v, w, x, y, z, a1, b1]])
+training_set_inputs = array([[a, b, c, d, e, f, g], [h, i, j, k, l, m, n], 
+                             [o, p, q, r, s, t, u], [v, w, x, y, z, a1, b1],
+                             [c1, d1, e1, f1, g1, h1, i1], [j1, k1, l1, m1, n1, o1, p1],
+                             [q1, r1, s1, t1, u1, v1, w1], [x1, y1, z1, a2, b2, c2, d2]])
 
-training_set_outputs = array([[1, 1, 0, 0]]).T
+training_set_outputs = array([[1, 1, 1, 1, 0, 0, 0, 0]]).T
 
 # Train the neural network using a training set.
 # Do it 10,000 times and make small adjustments each time.
@@ -183,6 +232,27 @@ neural_network.train(training_set_inputs, training_set_outputs, 10000)
 print("New synaptic weights after training: ")
 print(neural_network.synaptic_weights)
 
-# Test the neural network with a new situation. Should have an output of 1
+"""
+
+Test the neural network with a new situation. Should have an output of 1. 
+Don't need to use variable sentiment values as the array input works fine, the error is with the adjustment in train. 
+
+TODO - Fix adjustment error so that train can except same format as think. 
+
+
+"""
+comment = ToxicSentiments[12]
+comment_text = ToxicComments[12]
+
 print("Considering new situation:")
-print(neural_network.think(array([numpy.squeeze(ToxicSentiments[11])])))
+print("Comment:\n\n")
+print(comment_text)
+
+NewSituation = neural_network.test(array([numpy.squeeze(comment)]))
+print(comment)
+print(NewSituation)
+
+if NewSituation > 0.5:
+    print("censor")
+if NewSituation < 0.5:
+    print("do not censor")
