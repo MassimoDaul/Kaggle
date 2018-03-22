@@ -36,6 +36,7 @@ import csv
 from numpy import exp, array, random, dot
 import numpy
 import random
+import time
 # populating our list of toxic comments using the csv file:
 
 ToxicComments = []
@@ -49,6 +50,8 @@ with open("/Users/massimodaul/Downloads/train-2.csv", "r") as train_df:
                 or row['insult'] == "1" or row['identity_hate'] == "1"):
 
             ToxicComments.append(row['comment_text'])
+
+time.sleep(5)
 
 with open("/Users/massimodaul/Downloads/train-2.csv", "r") as train_df:
     reader = csv.DictReader(train_df)
@@ -74,6 +77,8 @@ for i in range(len(ToxicComments)):
 for i in range(len(CleanComments)):
     CleanSentiments.append(sentiment(CleanComments[i]))
 
+ProgressPoints = []
+
 
 class NeuralNetwork():
     def __init__(self):
@@ -81,8 +86,8 @@ class NeuralNetwork():
         # every time the program runs.
         numpy.random.seed(1)
 
-        # We model a single neuron, with 3 input connections and 1 output connection.
-        # We assign random weights to a 3 x 1 matrix, with values in the range -1 to 1
+        # We model a single neuron, with 7 input connections and 1 output connection.
+        # We assign random weights to a 7 x 1 matrix, with values in the range -1 to 1
         # and mean 0.
         self.synaptic_weights = 2 * numpy.random.random((7, 1)) - 1
 
@@ -100,7 +105,7 @@ class NeuralNetwork():
 
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
-    def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations):
+    def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations, ProgressPoints):
         for iteration in range(1, number_of_training_iterations):
             # Pass the training set through our neural network (a single neuron).
             output = self.think(training_set_inputs)
@@ -108,6 +113,7 @@ class NeuralNetwork():
             # Calculate the error (The difference between the desired output
             # and the predicted output).
             error = training_set_outputs - output
+            ProgressPoints.append([error])
 
             # Multiply the error by the input and again by the gradient of the Sigmoid curve.
             # This means less confident weights are adjusted more.
@@ -115,7 +121,7 @@ class NeuralNetwork():
             adjustment = dot(training_set_inputs.T, error * self.__sigmoid_derivative(output))
 
             # Adjust the weights.
-            for x in range(0, len(self.synaptic_weights)):
+            for x in range(0, len(self.synaptic_weights) - 1):
                 self.synaptic_weights[x] += adjustment[x]
 
     # The neural network thinks.
@@ -141,93 +147,30 @@ neural_network = NeuralNetwork()
 print("Random starting synaptic weights: ")
 print(neural_network.synaptic_weights)
 
-# very tedious way of preparing input values (NEED TO CHANGE)
 
-# first toxic comment
-a = ToxicSentiments[0][0]
-b = ToxicSentiments[0][1]
-c = ToxicSentiments[0][2]
-d = ToxicSentiments[0][3]
-e = ToxicSentiments[0][4]
-f = ToxicSentiments[0][5]
-g = ToxicSentiments[0][6]
+# populate inputs
+inputs = []
+for row in ToxicSentiments[:2000]:
+    inputs.append(array(row))
 
-# second toxic comment
-h = ToxicSentiments[1][0]
-i = ToxicSentiments[1][1]
-j = ToxicSentiments[1][2]
-k = ToxicSentiments[1][3]
-l = ToxicSentiments[1][4]
-m = ToxicSentiments[1][5]
-n = ToxicSentiments[1][6]
+for row in CleanSentiments[:2000]:
+    inputs.append(array(row))
 
-# third toxic comment
-o = ToxicSentiments[2][0]
-p = ToxicSentiments[2][1]
-q = ToxicSentiments[2][2]
-r = ToxicSentiments[2][3]
-s = ToxicSentiments[2][4]
-t = ToxicSentiments[2][5]
-u = ToxicSentiments[2][6]
+training_set_inputs = array(inputs)
 
-# fourth toxic comment
-v = ToxicSentiments[3][0]
-w = ToxicSentiments[3][1]
-x = ToxicSentiments[3][2]
-y = ToxicSentiments[3][3]
-z = ToxicSentiments[3][4]
-a1 = ToxicSentiments[3][5]
-b1 = ToxicSentiments[3][6]
+# populate outputs
+outputs = []
+for i in range(0, 1000):
+    outputs.append(1)
+    
+for i in range(0, 1000):
+    outputs.append(0)
 
-# first clean comment
-c1 = CleanSentiments[1][0]
-d1 = CleanSentiments[1][1]
-e1 = CleanSentiments[1][2]
-f1 = CleanSentiments[1][3]
-g1 = CleanSentiments[1][4]
-h1 = CleanSentiments[1][5]
-i1 = CleanSentiments[1][6]
-
-# second clean comment
-j1 = CleanSentiments[1][0]
-k1 = CleanSentiments[1][1]
-l1 = CleanSentiments[1][2]
-m1 = CleanSentiments[1][3]
-n1 = CleanSentiments[1][4]
-o1 = CleanSentiments[1][5]
-p1 = CleanSentiments[1][6]
-
-# third clean comment
-q1 = CleanSentiments[2][0]
-r1 = CleanSentiments[2][1]
-s1 = CleanSentiments[2][2]
-t1 = CleanSentiments[2][3]
-u1 = CleanSentiments[2][4]
-v1 = CleanSentiments[2][5]
-w1 = CleanSentiments[2][6]
-
-# fourth clean comment
-x1 = CleanSentiments[3][0]
-y1 = CleanSentiments[3][1]
-z1 = CleanSentiments[3][2]
-a2 = CleanSentiments[3][3]
-b2 = CleanSentiments[3][4]
-c2 = CleanSentiments[3][5]
-d2 = CleanSentiments[3][6]
-
-# The training set. We have 4 examples, each consisting of 3 input values
-# and 1 output value
-
-training_set_inputs = array([[a, b, c, d, e, f, g], [h, i, j, k, l, m, n], 
-                             [o, p, q, r, s, t, u], [v, w, x, y, z, a1, b1],
-                             [c1, d1, e1, f1, g1, h1, i1], [j1, k1, l1, m1, n1, o1, p1],
-                             [q1, r1, s1, t1, u1, v1, w1], [x1, y1, z1, a2, b2, c2, d2]])
-
-training_set_outputs = array([[1, 1, 1, 1, 0, 0, 0, 0]]).T
+training_set_outputs = array([outputs]).T
 
 # Train the neural network using a training set.
 # Do it 10,000 times and make small adjustments each time.
-neural_network.train(training_set_inputs, training_set_outputs, 10000)
+neural_network.train(training_set_inputs, training_set_outputs, 10000, ProgressPoints)
 
 print("New synaptic weights after training: ")
 print(neural_network.synaptic_weights)
@@ -245,7 +188,7 @@ comment = ToxicSentiments[12]
 comment_text = ToxicComments[12]
 
 print("Considering new situation:")
-print("Comment:\n\n")
+print("Comment:\n")
 print(comment_text)
 
 NewSituation = neural_network.test(array([numpy.squeeze(comment)]))
