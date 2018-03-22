@@ -7,7 +7,7 @@ def sentiment(blob):
     
     blob = TextBlob(str(blob))
     words = blob.words
-    words.lower()
+    words = words.lower()
     sentences = blob.sentences
 
     # sentiment counters
