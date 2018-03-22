@@ -150,10 +150,10 @@ print(neural_network.synaptic_weights)
 
 # populate inputs
 inputs = []
-for row in ToxicSentiments[:2000]:
+for row in ToxicSentiments[:1000]:
     inputs.append(array(row))
 
-for row in CleanSentiments[:2000]:
+for row in CleanSentiments[:1000]:
     inputs.append(array(row))
 
 training_set_inputs = array(inputs)
